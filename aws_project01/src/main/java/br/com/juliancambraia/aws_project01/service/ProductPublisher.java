@@ -19,9 +19,9 @@ public class ProductPublisher {
 
     private static final Logger LOG = LoggerFactory.getLogger(ProductPublisher.class);
 
-    private AmazonSNS snsClient;
-    private Topic productEventsTopic;
-    private ObjectMapper objectMapper;
+    private final AmazonSNS snsClient;
+    private final Topic productEventsTopic;
+    private final ObjectMapper mapper;
 
     @Autowired
     public ProductPublisher(AmazonSNS snsClient,
@@ -30,7 +30,7 @@ public class ProductPublisher {
 
         this.snsClient = snsClient;
         this.productEventsTopic = productEventsTopic;
-        this.objectMapper = objectMapper;
+        this.mapper = objectMapper;
     }
 
     public void publishProductEvent(Product product, EventType eventType, String username) {
@@ -43,11 +43,11 @@ public class ProductPublisher {
         envelope.setEventType(eventType);
 
         try {
-            envelope.setData(objectMapper.writeValueAsString(productEvent));
+            envelope.setData(mapper.writeValueAsString(productEvent));
 
             snsClient.publish(
                     productEventsTopic.getTopicArn(),
-                    objectMapper.writeValueAsString(envelope));
+                    mapper.writeValueAsString(envelope));
 
         } catch (JsonProcessingException e) {
             LOG.error("Failed to create product event message");
