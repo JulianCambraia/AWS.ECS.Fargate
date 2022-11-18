@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.jms.annotation.EnableJms;
 import org.springframework.jms.config.DefaultJmsListenerContainerFactory;
+import org.springframework.jms.core.JmsTemplate;
 import org.springframework.jms.support.destination.DynamicDestinationResolver;
 
 import javax.jms.Session;
@@ -40,5 +41,10 @@ public class JmsConfig {
         factory.setSessionAcknowledgeMode(Session.CLIENT_ACKNOWLEDGE);
 
         return factory;
+    }
+
+    @Bean
+    public JmsTemplate jmsTemplate() {
+        return new JmsTemplate(sqsConnectionFactory);
     }
 }

@@ -38,6 +38,5 @@ public class ProductEventConsumer {
                 envelope.getEventType(),
                 productEvent.getProductId(),
                 snsMessage.getMessageId());
-
     }
 }
