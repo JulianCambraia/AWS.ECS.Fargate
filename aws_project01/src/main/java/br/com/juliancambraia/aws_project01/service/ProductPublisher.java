@@ -45,10 +45,13 @@ public class ProductPublisher {
         try {
             envelope.setData(mapper.writeValueAsString(productEvent));
 
-            snsClient.publish(
+            var uuidMessage = snsClient.publish(
                     productEventsTopic.getTopicArn(),
                     mapper.writeValueAsString(envelope));
-
+            LOG.info("Product Event Sent - Event: {} - ProductId: {} - Identificador único capturada do Pub: {} ",
+                    envelope.getEventType(),
+                    productEvent.getProductId(),
+                    uuidMessage.getMessageId());
         } catch (JsonProcessingException e) {
             LOG.error("Failed to create product event message");
         }
