@@ -1,5 +1,6 @@
 package br.com.juliancambraia.aws_project02.config;
 
+import br.com.juliancambraia.aws_project02.repository.ProductEventLogRepository;
 import com.amazonaws.auth.DefaultAWSCredentialsProviderChain;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
