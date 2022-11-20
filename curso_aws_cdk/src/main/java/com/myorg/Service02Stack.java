@@ -72,7 +72,7 @@ public class Service02Stack extends Stack {
                 .taskImageOptions(
                         ApplicationLoadBalancedTaskImageOptions.builder()
                                 .containerName("aws_project02")
-                                .image(ContainerImage.fromRegistry("julianfernando/curso_aws_project02:1.3.0")) // o name deverá ser obtido no dockerhub
+                                .image(ContainerImage.fromRegistry("julianfernando/curso_aws_project02:1.5.0")) // o name deverá ser obtido no dockerhub
                                 .containerPort(9090)
                                 .logDriver(LogDriver.awsLogs(AwsLogDriverProps.builder()
                                         .logGroup(LogGroup.Builder.create(this, "Service02LogGroup")

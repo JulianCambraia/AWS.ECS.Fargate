@@ -28,7 +28,7 @@ sourceCompatibility = '17'
 
 bootJar {
     baseName = 'curso_aws_project02'
-    version = '1.3.0'
+    version = '1.5.0'
     mainClass = "br.com.juliancambraia.aws_project02.AwsProject02Application"
 }
 
