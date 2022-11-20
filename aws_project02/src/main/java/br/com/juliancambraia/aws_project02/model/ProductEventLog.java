@@ -53,7 +53,7 @@ public class ProductEventLog {
 
     @DynamoDBHashKey(attributeName = "sk")
     public String getSk() {
-        return this.productEventKey != null ? this.productEventKey.getPk() : null;
+        return this.productEventKey != null ? this.productEventKey.getSk() : null;
     }
 
     public void setSk(String sk) {
