@@ -53,7 +53,7 @@ public class ProductEventConsumer {
 
     private ProductEventLog buildProductEventLog(Envelope envelope, ProductEvent productEvent) {
 
-        long timestamp = Instant.MAX.toEpochMilli();
+        long timestamp = Instant.now().toEpochMilli();
 
         ProductEventLog productEventLog = new ProductEventLog();
 
