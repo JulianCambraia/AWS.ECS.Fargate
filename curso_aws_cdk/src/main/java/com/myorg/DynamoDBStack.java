@@ -63,7 +63,6 @@ public class DynamoDBStack extends Stack {
                         .scaleInCooldown(Duration.seconds(30))
                         .scaleOutCooldown(Duration.seconds(30))
                         .build());
-
     }
 
     public Table getProductEventsDdb() {
