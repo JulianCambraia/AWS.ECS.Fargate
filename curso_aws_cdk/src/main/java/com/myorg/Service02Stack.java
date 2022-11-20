@@ -5,6 +5,7 @@ import software.amazon.awscdk.RemovalPolicy;
 import software.amazon.awscdk.Stack;
 import software.amazon.awscdk.StackProps;
 import software.amazon.awscdk.services.applicationautoscaling.EnableScalingProps;
+import software.amazon.awscdk.services.dynamodb.Table;
 import software.amazon.awscdk.services.ecs.AwsLogDriverProps;
 import software.amazon.awscdk.services.ecs.Cluster;
 import software.amazon.awscdk.services.ecs.ContainerImage;
@@ -25,11 +26,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Service02Stack extends Stack {
-    public Service02Stack(final Construct scope, final String id, Cluster cluster, SnsTopic productEventsTopic) {
-        this(scope, id, null, cluster, productEventsTopic);
+    public Service02Stack(final Construct scope, final String id, Cluster cluster, SnsTopic productEventsTopic, Table productEventDynamoDB) {
+        this(scope, id, null, cluster, productEventsTopic, productEventDynamoDB);
     }
 
-    public Service02Stack(final Construct scope, final String id, final StackProps props, Cluster cluster, SnsTopic productEventsTopic) {
+    public Service02Stack(final Construct scope, final String id, final StackProps props, Cluster cluster, SnsTopic productEventsTopic, Table productEventDynamoDB) {
         super(scope, id, props);
 
         // fila de DLQ - recebe as mensagens que não foram tratadas pelo consumidor
@@ -71,7 +72,7 @@ public class Service02Stack extends Stack {
                 .taskImageOptions(
                         ApplicationLoadBalancedTaskImageOptions.builder()
                                 .containerName("aws_project02")
-                                .image(ContainerImage.fromRegistry("julianfernando/curso_aws_project02:1.0.0")) // o name deverá ser obtido no dockerhub
+                                .image(ContainerImage.fromRegistry("julianfernando/curso_aws_project02:1.3.0")) // o name deverá ser obtido no dockerhub
                                 .containerPort(9090)
                                 .logDriver(LogDriver.awsLogs(AwsLogDriverProps.builder()
                                         .logGroup(LogGroup.Builder.create(this, "Service02LogGroup")
@@ -105,5 +106,8 @@ public class Service02Stack extends Stack {
 
         // permitindo que o serviço consuma mensagens da fila adicionando permissões
         productEventsQueue.grantConsumeMessages(service02.getTaskDefinition().getTaskRole());
+
+        // permissões de leitura e escrita para que o serviço 02 possa acessar a tabela DynamoDB.
+        productEventDynamoDB.grantReadWriteData(service02.getTaskDefinition().getTaskRole());
     }
 }
