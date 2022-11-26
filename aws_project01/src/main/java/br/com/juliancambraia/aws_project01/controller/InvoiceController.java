@@ -23,7 +23,7 @@ public class InvoiceController {
     @Value("${aws.sqs.queue.invoice.events.name}")
     private String bucketName;
 
-    private AmazonS3 amazonS3;
+    private final AmazonS3 amazonS3;
 
     @Autowired
     public InvoiceController(AmazonS3 amazonS3) {
