@@ -5,6 +5,7 @@ import br.com.juliancambraia.aws_project01.model.UrlResponse;
 import br.com.juliancambraia.aws_project01.repository.InvoiceRepository;
 import com.amazonaws.HttpMethod;
 import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.Headers;
 import com.amazonaws.services.s3.model.GeneratePresignedUrlRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -24,7 +25,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/invoices")
 public class InvoiceController {
-    @Value("${aws.sqs.queue.invoice.events.name}")
+    @Value("${aws.s3.bucket.invoice.name}")
     private String bucketName;
 
     private final AmazonS3 amazonS3;
@@ -46,6 +47,8 @@ public class InvoiceController {
         GeneratePresignedUrlRequest generatePresignedUrlRequest = new GeneratePresignedUrlRequest(bucketName, processId)
                 .withMethod(HttpMethod.PUT)
                 .withExpiration(Date.from(expirationTime));
+        generatePresignedUrlRequest.addRequestParameter(
+                Headers.S3_USER_METADATA_PREFIX + "process-id", processId);
 
         urlResponse.setExpirationTime(expirationTime.getEpochSecond());
         urlResponse.setUrl(amazonS3.generatePresignedUrl(generatePresignedUrlRequest).toString());
