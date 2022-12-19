@@ -15,7 +15,7 @@ public class S3Config {
     private String awsRegion;
 
     @Bean
-    public AmazonS3 snsClient() {
+    public AmazonS3 amazonS3Client() {
         return AmazonS3ClientBuilder.standard()
                 .withRegion(awsRegion)
                 .withCredentials(new DefaultAWSCredentialsProviderChain()) // procura credenciais no contexto da aplicação
